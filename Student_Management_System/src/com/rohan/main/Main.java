@@ -53,8 +53,7 @@ public class Main {
 					new StudentDAO().addStudent(s);
 					break;
 		
-		case 2: System.out.println("Enter Student ID want to Update:");
-				int sid2 = sc.nextInt();
+		case 2: new StudentDAO().updateStudent(s);
 				break;
 		case 3: System.out.println("Enter Student ID to Delete :");
 				int sid3 = sc.nextInt();
