@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import com.rohan.Student;
@@ -79,7 +80,7 @@ public class StudentDAO
 		}
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			System.out.println("Student ID already Exist.");
 		}
 		
 		
@@ -92,8 +93,7 @@ public class StudentDAO
 		{
 			Connection con = jc.dataBase();
 			PreparedStatement pstmt = null;
-			System.out.println("Enter Student ID to Update :");
-			int sid = sc.nextInt();
+			int sid =s.getStuId();
 			String query = "SELECT * FROM students WHERE student_id = ?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, sid);
@@ -217,13 +217,12 @@ public class StudentDAO
 		}
 	
 	}
-	public void deleteStudent() throws Exception
+	public void deleteStudent(Student s) throws Exception
 	{
 		try {
 			int rowCount = 0;
 			Connection con = jc.dataBase();
-			System.out.println("Enter Student ID to Delete :");
-			int id = sc.nextInt();
+			int id = s.getStuId();
 			String query = "DELETE FROM students WHERE student_id = ?";
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, id);
@@ -250,7 +249,7 @@ public class StudentDAO
 			{
 				try
 				{
-					pstmt.close();
+					con.close();
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -263,6 +262,79 @@ public class StudentDAO
 		
 		
 	}
+	public void showTable() throws Exception
+	{
+		try(Connection con = new JdbcConnection().dataBase();
+				Statement stmt = con.createStatement();)
+		{
+			
+			String query = "SELECT * FROM students";
+			ResultSet rs = stmt.executeQuery(query);
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int rowCount = 0;
+			for(int i=1; i<=rsmd.getColumnCount();i++)
+			{
+				System.out.print(rsmd.getColumnName(i)+"\t");
+			}
+			System.out.println();
+			 while (rs.next()) {
+			        for (int i = 1; i <= rsmd.getColumnCount(); i++) 
+			        {
+			            System.out.print(rs.getString(i) + "\t");
+			        }
+			        System.out.println();
+			        ++rowCount;
+			        
+			    }
+			 System.out.println();
+		     System.out.println(rowCount+" rows Selected.");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+	}
+	public void viewStudent(Student s) throws Exception
+	{
+		Connection con = new JdbcConnection().dataBase();
+		
+		String query = "SELECT * FROM students WHERE student_id = ?";
+		PreparedStatement pstmt = con.prepareStatement(query);
+		int id = s.getStuId();
+		pstmt.setInt(1, id);
+		ResultSet rs = pstmt.executeQuery();
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int rowCount=0;
+		if(rs.next())
+		{
+			for(int i=1; i<=rsmd.getColumnCount();i++)
+			{
+				System.out.print(rsmd.getColumnName(i)+ "\t");
+				
+			}
+			System.out.println();
+			 do{
+		        for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+		            System.out.print(rs.getString(i) + "\t");
+		            
+		        }
+		        ++rowCount;
+		        
+		    }while (rs.next());
+			 System.out.println();
+		        System.out.println(rowCount+" rows Selected.");
+		}
+		else
+		{
+			System.out.println("Student Not Found.");
+		}
+		
+		
+		
+	}
+	
 	
 	
 			

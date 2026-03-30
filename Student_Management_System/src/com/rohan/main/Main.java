@@ -9,8 +9,8 @@ public class Main {
 
 	public static void main(String[] args) throws Exception 
 	{
-		Scanner sc = new Scanner(System.in);
-		Student s = new Student();
+		Scanner sc = new Scanner(System.in);		
+		StudentDAO sda = new StudentDAO();
 		while(true) 
 		{
 		System.out.println("================================================");
@@ -24,12 +24,14 @@ public class Main {
 		int input = sc.nextInt();
 		switch(input)
 		{
-		case 1: System.out.println("Enter Student ID :");
+		case 1: Student s = new Student();
+				System.out.println("Enter Student ID :");
 					int sid1 = sc.nextInt();
-					s.setStuId(sid1);
+					s.setStuId(sid1);sc.nextLine();
 				System.out.println("Enter Student First Name :");
-					String fName = sc.next();
+					String fName = sc.nextLine();
 					s.setfName(fName);
+					
 				System.out.println("Enter Student Last Name :");
 					
 					String lName = sc.next();					
@@ -50,20 +52,34 @@ public class Main {
 				System.out.println("Enter Student Grade (A to D) :");
 					char grade = sc.next().charAt(0);
 					s.setGrade(grade);
-					new StudentDAO().addStudent(s);
+					sda.addStudent(s);
 					break;
 		
-		case 2: new StudentDAO().updateStudent(s);
+		case 2: Student s1 = new Student();
+				System.out.println("Enter Student ID to Update :");
+				int sid = sc.nextInt();
+				s1.setStuId(sid);
+				sda.updateStudent(s1);
 				break;
-		case 3: new StudentDAO().deleteStudent();
+				
+		case 3: Student s2 = new Student();
+				System.out.println("Enter Student ID to Delete :");
+				int id = sc.nextInt();
+				s2.setStuId(id);
+				sda.deleteStudent(s2);
+				break;	
+				
+		case 4: sda.showTable();
 				break;
-		
-		
-		case 4: break;
-		case 5: System.out.println("Enter Student ID :");
-				int sid4 = sc.nextInt();
+				
+		case 5: Student s3 = new Student();
+				System.out.println("Enter Student ID :");
+				int id2 = sc.nextInt();
+				s3.setStuId(id2);
+				sda.viewStudent(s3);
 				break;
-		default: System.out.println("Wrong Input :");
+				
+		default: System.out.println("Invalid option. Please try again.");
 			
 		}
 	}
