@@ -86,6 +86,7 @@ public class StudentDAO
 	}
 	
 	public void updateStudent(Student s)
+
 	{
 		try
 		{
@@ -215,8 +216,57 @@ public class StudentDAO
 			e.printStackTrace();
 		}
 	
-	}	
 	}
+	public void deleteStudent() throws Exception
+	{
+		try {
+			int rowCount = 0;
+			Connection con = jc.dataBase();
+			System.out.println("Enter Student ID to Delete :");
+			int id = sc.nextInt();
+			String query = "DELETE FROM students WHERE student_id = ?";
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, id);
+			rowCount += pstmt.executeUpdate();
+			if(rowCount >0)
+			{
+				System.out.println(rowCount+" row Deleted.");
+			}
+			else
+			{
+				System.out.println("Student Not Found.");
+			}
+			if(pstmt != null)
+			{
+				try
+				{
+					pstmt.close();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if(con != null)
+			{
+				try
+				{
+					pstmt.close();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}			
+		
+		
+	}
+	
+	
+			
+}
 	
 			
 			
